@@ -1,2 +1,1 @@
-web: python html_flask.py
-streamlit: streamlit run menu.py --server.port $PORT
+web: python webapp.py
