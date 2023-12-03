@@ -1,1 +1,2 @@
-web: gunicorn -w 4 -b 0.0.0.0:$PORT webapp:app
+web: gunicorn -w 4 -b 0.0.0.0:$PORT html_flask:app
+streamlit: streamlit run menu.py --server.port $PORT
