@@ -1,12 +1,10 @@
 # Script Streamlit (streamlit_app.py)
 import streamlit as st                                                                                   
 import requests
-
-
 def get_matrix_values_A():
     try:
         # Effectuer une requête GET pour récupérer les valeurs de la matrice
-        response = requests.get("http://127.0.0.1:5000/get_matrix_values_A")
+        response = requests.get("/get_matrix_values_A")
         # Vérifier si la requête a réussi (code de statut 200)
         if response.status_code == 200:
             matrix_valuesA = response.json()
@@ -21,7 +19,7 @@ def get_matrix_values_A():
 def get_matrix_values_B():
     try:
         # Effectuer une requête GET pour récupérer les valeurs de la matrice
-        response = requests.get("http://127.0.0.1:5000/get_matrix_values_B")
+        response = requests.get("/get_matrix_values_B")
         # Vérifier si la requête a réussi (code de statut 200)
         if response.status_code == 200:
             matrix_valuesB = response.json()
@@ -37,7 +35,7 @@ def get_matrix_values_B():
 def get_vector_values():
     try:
         # Effectuer une requête GET pour récupérer les valeurs du vecteur
-        response = requests.get("http://127.0.0.1:5000/get_vector_values")
+        response = requests.get("/get_vector_values")
         # Vérifier si la requête a réussi (code de statut 200)
         if response.status_code == 200:
             vector_values = response.json()
@@ -268,7 +266,7 @@ def matriceA_html():
 
         function getMatrixValuesFromPython() {
            
-            fetch('http://127.0.0.1:5000/get_matrix_values_A')
+            fetch('/get_matrix_values_A')
                 updateMatrixValuesInPython()
                 .then(response => response.json())
                 .then(data => {
@@ -280,7 +278,7 @@ def matriceA_html():
 
         function updateMatrixValuesInPython() {
             saveMatrixValues();
-            fetch('http://127.0.0.1:5000/update_matrix_values_A', {
+            fetch('/update_matrix_values_A', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -486,7 +484,7 @@ def vecteur_html():
         }
 
         function getVectorValuesFromPython() {
-            fetch('http://127.0.0.1:5000/get_vector_values')
+            fetch('/get_vector_values')
             updateVectorValuesInPython()
                 .then(response => response.json())
                 .then(data => {
@@ -498,7 +496,7 @@ def vecteur_html():
 
         function updateVectorValuesInPython() {
             saveVectorValues();
-            fetch('http://127.0.0.1:5000/update_vector_values', {
+            fetch('/update_vector_values', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -740,7 +738,7 @@ def matriceB_html():
 
         function getMatrixValuesFromPython() {
 
-            fetch('http://127.0.0.1:5000/get_matrix_values_B')
+            fetch('/get_matrix_values_B')
             updateMatrixValuesInPython()
                 .then(response => response.json())
                 .then(data => {
@@ -752,7 +750,7 @@ def matriceB_html():
 
         function updateMatrixValuesInPython() {
             saveMatrixValues();
-            fetch('http://127.0.0.1:5000/update_matrix_values_B', {
+            fetch('/update_matrix_values_B', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
