@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS  # Importez l'extension
-
+import os
 app = Flask(__name__)
 CORS(app)  # Utilisez l'extension pour activer CORS pour toutes les routes
 matrix_valuesA = [] 
@@ -44,4 +44,5 @@ def update_vector_values():
     return jsonify({'message': 'Vector values updated successfully!'})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 8501))
+    app.run(port=port)
