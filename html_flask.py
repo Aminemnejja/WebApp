@@ -44,5 +44,5 @@ def update_vector_values():
     return jsonify({'message': 'Vector values updated successfully!'})
 
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 8501))
+    port = int(os.environ.get('PORT', 5000))
     app.run(port=port)
