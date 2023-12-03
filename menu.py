@@ -4,7 +4,7 @@ import Multiplication_Matrice_parMatrice as p
 import Multiplication_Matrice_parVeteur as v
 import Résolution_des_systéme_linéaire as R
 # Définir la configuration de la page
-st.server.run(port=8080)
+
 
 st.set_page_config(
         page_title="Calculatrice Matricielle",
