@@ -148,6 +148,42 @@ def decomposition_LU_bande(A,n,m):
         for i in range(k + 1, n):
             L[i][k] = (A[i][k] - sum(L[i][j] * U[j][k] for j in range(k))) / U[k][k]
     return L,U
+def decomposition_LU_Dense_Symetrique(A,n):
+    #pour matrice symétrique A=L*D*Transposée(L)
+
+    L = np.zeros_like(A, dtype=float)
+    D = np.zeros(n, dtype=float)
+
+    for i in range(n):
+        for j in range(i+1):
+                s = A[i, j]
+                for k in range(j):
+                    s -= L[i, k]**2 * D[k]
+                D[i] = s
+                s = A[i, j]
+                for k in range(j):
+                    s -= L[i, k] * L[j, k] * D[k]
+                L[i, j] = s / D[j]
+
+
+    return L, np.diag(D)
+def decomposition_LU_bande_Symetrique(A, n,m):
+    #pour matrice symétrique A=L*D*Transposée(L)
+    L = np.zeros_like(A, dtype=float)
+    D = np.zeros(n, dtype=float)
+
+    for i in range(n):
+        L[i,i]=1
+        for j in range(max(0, i - m), i + 1):
+            s = A[i, j]
+            for k in range(max(j - m, 0), j):
+                s -= L[i, k] * L[j, k] * D[k]
+            if i == j:
+                D[i] = s
+            else:
+                L[i, j] = s / D[j]
+
+    return L, np.diag(D)
 def decomposition_cholesky_dense(A,n):
     L = np.zeros((n, n))
 
@@ -223,22 +259,6 @@ def elimination_gaussienne_avec_pivot_dense(A,b,n):
                 A[i][j] -= A[i][k]* A[k][j]
             b[i] -= A[i][k] * b[k] 
     return A,b
-# Exemple d'utilisation
-A = np.array([[2, -1, 2], [-6, 0, -2], [8, -1, 5]],dtype=float)
-a=np.array([
-    [1,2,0],
-    [2,10,1],
-    [0,1,5]
-    ],dtype=float)
 
-
-
-b=np.array([[1],
-           [1],
-           [1] ]
-             ,dtype=float) 
-A,b=elimination_gaussienne_avec_pivot_bande(a, b, 3, 1)
-print(A)
-print(t.sys_lin_sup_demiBande(A, b, 3, 1))
 
 

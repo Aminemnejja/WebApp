@@ -26,8 +26,6 @@ def app():
                exit(0)
            matrix_type_A = dt.determine_matrix_type(A)
                
-          
-
          
           
            if matrix_type_A=="Triangulaire supérieure":

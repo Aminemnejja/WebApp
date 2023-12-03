@@ -24,7 +24,7 @@ def main():
             app_multiply_matrices()
 
     elif selected_option == "Multiplication par inverse de matrice A demi bande":
-        st.header("Multiplication de  A(A-¹ )")
+        st.header("Multiplication de  A\u207B\u00B9")
         st.components.v1.html(matriceA_html,width=300, height=300)
   
 
@@ -33,7 +33,7 @@ def main():
             app_inverse_multiply_band_matrix()
 
     elif selected_option == "Multiplication de matrice A par son transposée":
-        st.header("Multiplication de A(AT )")
+        st.header("Multiplication de AAᵀ")
         
         st.components.v1.html(matriceA_html,width=300, height=300)
 
