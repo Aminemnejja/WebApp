@@ -2,17 +2,10 @@
 import streamlit as st                                                                                   
 import requests
 
-
-a="https://webapp-esz7.onrender.com/get_matrix_values_A"
-b="https://webapp-esz7.onrender.com/get_matrix_values_B"
-c="https://webapp-esz7.onrender.com/get_vector_values"
-d="https://webapp-esz7.onrender.com/update_matrix_values_A"
-e="https://webapp-esz7.onrender.com/update_matrix_values_B"
-f="https://webapp-esz7.onrender.com/update_vector_values"
 def get_matrix_values_A():
     try:
         # Effectuer une requête GET pour récupérer les valeurs de la matrice
-        response = requests.get(a)
+        response = requests.get("https://webapp-esz7.onrender.com/get_matrix_values_A")
         # Vérifier si la requête a réussi (code de statut 200)
         if response.status_code == 200:
             matrix_valuesA = response.json()
@@ -27,7 +20,7 @@ def get_matrix_values_A():
 def get_matrix_values_B():
     try:
         # Effectuer une requête GET pour récupérer les valeurs de la matrice
-        response = requests.get(b)
+        response = requests.get("https://webapp-esz7.onrender.com/get_matrix_values_B")
         # Vérifier si la requête a réussi (code de statut 200)
         if response.status_code == 200:
             matrix_valuesB = response.json()
@@ -43,7 +36,7 @@ def get_matrix_values_B():
 def get_vector_values():
     try:
         # Effectuer une requête GET pour récupérer les valeurs du vecteur
-        response = requests.get(c)
+        response = requests.get("https://webapp-esz7.onrender.com/get_vector_values")
         # Vérifier si la requête a réussi (code de statut 200)
         if response.status_code == 200:
             vector_values = response.json()
