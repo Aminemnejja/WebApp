@@ -5,7 +5,6 @@ app = Flask(__name__)
 CORS(app)  # Utilisez l'extension pour activer CORS pour toutes les routes
 matrix_valuesA = [] 
 matrix_valuesB = [] 
-
 vector_values = []
 
 @app.route('/get_matrix_values_A', methods=['GET'])
