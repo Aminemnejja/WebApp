@@ -5,7 +5,7 @@ def run_flask():
     subprocess.run(["python", "html_flask.py"])
 
 def run_streamlit():
-    subprocess.run(["streamlit", "run", "menu.py","--server.port", "8081"])
+    subprocess.run(["streamlit", "run", "menu.py"])
     
 # Lancer Flask dans un thread séparé
 flask_thread = threading.Thread(target=run_flask)
