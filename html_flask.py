@@ -3,10 +3,9 @@ from flask_cors import CORS  # Importez l'extension
 import os
 app = Flask(__name__)
 CORS(app)  # Utilisez l'extension pour activer CORS pour toutes les routes
-matrix_valuesA = [] 
-matrix_valuesB = [] 
-vector_values = []
-
+matrix_valuesA = os.getenv("MATRIX_VALUES_A", [])
+matrix_valuesB = os.getenv("MATRIX_VALUES_B", [])
+vector_values = os.getenv("VECTOR_VALUES", [])
 @app.route('/get_matrix_values_A', methods=['GET'])
 def get_matrix_values_A():
     # Logique pour récupérer les valeurs de la matrice
