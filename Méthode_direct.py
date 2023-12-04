@@ -112,7 +112,7 @@ def elimination_gaussienne_sans_pivot_dense_symetrique(A, b,n):
                 A[i][j] -= factor * A[k][j]
             b[i] -= factor * b[k]
     
-    return  A,b
+    return  t.sys_lin_sup_dense(A, b, n)
 
 
 
@@ -123,7 +123,7 @@ def elimination_gaussienne_sans_pivot_bande_symetrique(A, b, n,m):
             for j in range(i,min(k+m+1,n)):
                 A[i][j] -= factor * A[k][j]
             b[i] -= factor * b[k]
-    return A,b
+    return t.sys_lin_sup_demiBande(A, b, n, m)
 def decomposition_LU_dense(A,n):
     L = np.zeros((n,n))
     U = np.zeros((n,n))
@@ -214,31 +214,9 @@ def decomposition_cholesky_bande(A,n,m):
             L[i][j]/=L[j][j]
     return L
             
-def elimination_gaussienne_avec_pivot_bande(A,b,n,m):
-
-    for k in range(n-1):
-        # Trouver l'indice de la ligne avec le pivot maximal
-        max_index = np.argmax(np.abs(A[k:, k])) + k
-
-        # Échanger les lignes si le pivot est nul
-        if A[max_index, k] == 0:
-            continue
-        else:
-            A[[k, max_index], :] = A[[max_index, k], :]
-            b[[k, max_index]] = b[[max_index, k]]
-
-        # Échelonner la colonne k
-        pivot = A[k][k]
-        for i in range(k + 1, min(k + m + 1, n)):
-            A[i][k] /= pivot
-            for j in range(k + 1, min(k + m + 1, n)):
-                A[i][j] -= A[i][k] * A[k][j]
-            b[i] -= A[i][k] * b[k]
-        return A,b
 
 
 def elimination_gaussienne_avec_pivot_dense(A,b,n):
- 
  
     
     for k in range(n-1):
@@ -258,7 +236,31 @@ def elimination_gaussienne_avec_pivot_dense(A,b,n):
             for j in range(k+1, n):
                 A[i][j] -= A[i][k]* A[k][j]
             b[i] -= A[i][k] * b[k] 
-    return A,b
+    return t.sys_lin_sup_dense(A, b, n)
 
+
+def elimination_gaussienne_avec_pivot_bande(A, b, n,m):
+    xn=2*m+1
+    for k in range(n-1):
+        # Trouver l'indice de la ligne avec le pivot maximal
+        max_index = np.argmax(np.abs(A[k:, k])) + k +1
+
+        # Échanger les lignes si le pivot est nul
+        if A[max_index - 1, k] == 0:
+            continue
+        else:
+            A[[k, max_index - 1], :] = A[[max_index - 1, k], :]
+            b[[k, max_index - 1]] = b[[max_index - 1, k]]
+
+        # Échelonner la colonne k
+        pivot = A[k][k]
+        for i in range(k + 1, min(k + xn + 1, n)):
+            A[i][k] /= pivot
+            for j in range(k + 1, min(k + xn + 1, n)):
+                A[i][j] -= A[i][k] * A[k][j]
+            b[i] -= A[i][k] * b[k]
+        
+
+    return t.sys_lin_sup_dense(A, b, n)
 
 

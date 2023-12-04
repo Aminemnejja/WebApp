@@ -1,6 +1,41 @@
 import numpy as np
 
 
+def Gausse_soleide_converge(A, n):  
+    E = np.zeros((n, n))
+    D = np.zeros((n, n))
+    F = np.zeros((n, n))
+
+    for i in range(n):
+        D[i][i] = A[i][i]
+        for j in range(i):
+            E[i][j] = -A[i][j]
+        for j in range(i + 1, n):
+            F[i][j] = -A[i][j]
+
+    return check_convergence(np.dot(np.linalg.inv(D - E), F))
+
+def Jacobie_converge(A, n):
+    E = np.zeros((n, n))
+    D = np.zeros((n, n))
+    F = np.zeros((n, n))
+
+    for i in range(n):
+        D[i][i] = A[i][i]
+        for j in range(i):
+            E[i][j] = -A[i][j]
+        for j in range(i + 1, n):
+            F[i][j] = -A[i][j]
+
+    return check_convergence(np.dot(np.linalg.inv(D), E + F))
+
+def check_convergence(matrix):
+    eigenvalues = np.linalg.eigvals(matrix)
+    spectral_radius = max(abs(eigenvalues))
+    if (spectral_radius < 1):
+        return True
+    else:
+        return False
 
 
 def jacobi_epsilon(A, B, n,eps):

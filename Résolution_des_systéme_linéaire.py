@@ -6,6 +6,7 @@ import Systeme_Lineaire_Triangulaire as t
 import Méthode_direct as m
 import Méthode_itérative as I
 import Fraction as FR 
+
 def main():
 
     st.header(" Résolution de systéme : Ax=b")
@@ -43,21 +44,23 @@ def main():
                         exit(0)
                 
                 matrix_type_A = dt.determine_matrix_type(A)
-                st.success(f"Type de matrice A détecté : {matrix_type_A}")
+                st.success(dt.message_info(matrix_type_A, A))
     
                 if operation=="Gauss":
                     if matrix_type_A[0]=="matrice bande" and np.allclose(A, A.T) and np.all(np.linalg.eigvals(A) > 0) :
-                        A,b=m.elimination_gaussienne_sans_pivot_bande_symetrique(A, b,n, matrix_type_A[1])
-                        x=t.sys_lin_sup_demiBande(A, b, n, matrix_type_A[1])
+                        x=m.elimination_gaussienne_sans_pivot_bande_symetrique(A, b,n, matrix_type_A[1])
+                        
                         st.dataframe(FR.matrix_to_fraction(x))
                         
                     elif matrix_type_A=="Symétrique" and np.all(np.linalg.eigvals(A) > 0):
-                        A,b=m.elimination_gaussienne_sans_pivot_dense_symetrique(A, b, n)
-                        x=t.sys_lin_sup_dense(A, b, n)
+                        x=m.elimination_gaussienne_sans_pivot_dense_symetrique(A, b, n)
+                        
+                        st.dataframe(FR.matrix_to_fraction(x))
+                    elif matrix_type_A=="matrice bande":
+                        x=m.elimination_gaussienne_avec_pivot_bande(A, b, n, m)
                         st.dataframe(FR.matrix_to_fraction(x))
                     else:
-                        A,b=m.elimination_gaussienne_avec_pivot_dense(A, b, n)
-                        x=t.sys_lin_sup_dense(A, b, n)
+                        x=m.elimination_gaussienne_avec_pivot_dense(A, b, n)
                         st.dataframe(FR.matrix_to_fraction(x))
                 elif operation=="Gauss_jordan":
                     b = b[:, np.newaxis]
@@ -72,7 +75,7 @@ def main():
                         st.dataframe(FR.matrix_to_fraction(x))
                 elif operation=="Décomposition LU":
                   
-                    if  matrix_type_A[0]=="matrice bande" and np.allclose(A, A.T) and np.all(np.linalg.eigvals(A) > 0):
+                    if  matrix_type_A[0]=="matrice bande" and np.allclose(A, A.T) and np.all(np.linalg.eigvals(A) !=0):
                         st.header("A=L.D.L\u1D57")
                         L,D=m.decomposition_LU_bande_Symetrique(A, n, matrix_type_A[1])
                         U=np.dot(D,L.T)
@@ -88,7 +91,7 @@ def main():
                         st.write("X=")
                         st.dataframe(FR.matrix_to_fraction(x))
                         
-                    elif matrix_type_A[0]=="matrice bande"  and np.all(np.linalg.eigvals(A) > 0) :
+                    elif matrix_type_A[0]=="matrice bande"  and  np.all(np.linalg.eigvals(A) !=0) :
                         st.header("A=L.D")
                         L,U=m.decomposition_LU_bande(A, n, matrix_type_A[1])
                         y = t.sys_lin_inf_demiBande(L, b,n, matrix_type_A[1])
@@ -102,7 +105,7 @@ def main():
                                 st.dataframe(FR.matrix_to_fraction(U))
                         st.write("X=")
                         st.dataframe(FR.matrix_to_fraction(x))
-                    elif  matrix_type_A[0]=="Symétrique" and np.all(np.linalg.eigvals(A) > 0):
+                    elif  matrix_type_A[0]=="Symétrique" and np.all(np.linalg.eigvals(A) !=0):
                         st.header("A=L.D.L\u1D57")
                         L,D=m.decomposition_LU_dense_Symetrique(A, n)
                         U=np.dot(D,L.T)
@@ -117,7 +120,7 @@ def main():
                                 st.dataframe(FR.matrix_to_fraction(U))
                         st.write("X=")
                         st.dataframe(FR.matrix_to_fraction(x))
-                    elif  np.all(np.linalg.eigvals(A) > 0):
+                    elif np.all(np.linalg.eigvals(A) !=0) :
                         st.header("A=L.D")
                         L,U=m.decomposition_LU_dense(A, n)
                         y = t.sys_lin_inf_dense(L, b,n)
@@ -132,7 +135,7 @@ def main():
                         st.write("X=")
                         st.dataframe(FR.matrix_to_fraction(x))
                     else :
-                        st.error("Matrice doit etre definie positive")
+                        st.error("Matrice n'est pas décompasable")
                 
                 elif operation=="Cholesky":
                     st.header("A=L.L\u1D57")
@@ -202,9 +205,12 @@ def main():
                                  if rang_A != A.shape[1]:
                                      st.warning("Infiniment de solutions ")
                                      exit(0)
+                                 if I.Gausse_soleide_converge(A, n)==False or I.Jacobie_converge(A, n)==False:
+                                     st.warning("La matrice est diverge")
+                                     exit(0)
                              
-                             matrix_type_A = dt.determine_matrix_type(A)
-                             st.success(f"Type de matrice A détecté : {matrix_type_A}")
+                             matrix_type = dt.determine_matrix_type(A)
+                             st.success(dt.message_info(matrix_type, A))
                              if operation=="Jacobie par une valeur approché epsilon" :
                                  r=I.jacobi_epsilon(A, b, n, epsilon)
                              elif operation=="Jacobie avec nombre d'itération connnue ":

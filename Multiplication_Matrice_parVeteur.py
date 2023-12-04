@@ -25,23 +25,19 @@ def app():
                st.warning("Les dimensions de matrice A et vecteur B doit etre égale")
                exit(0)
            matrix_type_A = dt.determine_matrix_type(A)
+           st.success(dt.message_info(matrix_type_A, A))
                
          
           
            if matrix_type_A=="Triangulaire supérieure":
-               st.success(f"Type de matrice A détecté : {matrix_type_A}")
                result=MV.Matrice_sup(A, b, n)
            elif matrix_type_A=="Triangulaire inférieure": 
-               st.success(f"Type de matrice A détecté : {matrix_type_A}")
                result=MV.Matrice_inf(A, b, n)
            elif matrix_type_A[0]=="demi bande inférieur":
-               st.success(f"Type de matrice A détecté  est une matrice demi bande inférieur de largeur m=  {matrix_type_A[1]}")
                result=MV.Matrice_demi_bande_inf(A, b, n, matrix_type_A[1])
            elif matrix_type_A[0]=="demi bande supérieur":
-               st.success(f"Type de matrice A détecté est une matrice  demi bande supérieur de largeur  m=  {matrix_type_A[1]}")
                result=MV.Matrice_demi_bande_sup(A, b, n, matrix_type_A[1])
            else:
-               st.success(f"Type de matrice A détecté : {matrix_type_A}")
                result=MV.Matrice_Dense(A, b, n)
            st.success("Résultat de la multiplication de matrices :")
            st.dataframe(FR.matrix_to_fraction(result))

@@ -52,8 +52,8 @@ def app_multiply_matrices():
             st.warning("Les deux matrice  doit etre de méme Taile")
             exit(0)
         matrix_type_B = dt.determine_matrix_type(B)
-        st.success(f"Type de matrice A détecté : {matrix_type_A}")
-        st.success(f"Type de matrice B détecté : {matrix_type_B}")   
+        st.success(dt.message_info(matrix_type_A, A))
+        st.success(dt.message_info(matrix_type_B, B) )  
 
         if matrix_type_A[0] == "matrice bande" and matrix_type_B[0] == "demi bande inférieur" and matrix_type_A[1] == matrix_type_B[1]:
             result = MA.multiplication_matrice_band_demi_bande(A, B, matrix_type_A[1], n)
@@ -79,10 +79,11 @@ def app_inverse_multiply_band_matrix():
     try:
         A =np.array(f.get_matrix_values_A(),dtype=float)
         if np.linalg.det(A) == 0:
-            st.warnin("Matrice A n'est pas inversible")
+            st.warning("Matrice A n'est pas inversible")
             exit(0)
         n = A.shape[0]
         matrix_type_A = dt.determine_matrix_type(A)
+        st.success(dt.message_info(matrix_type_A, A))
 
         if matrix_type_A[0] == "matrice bande":
             result = MA.multiplication_bande_inverse(A, n, matrix_type_A[1])
@@ -93,6 +94,7 @@ def app_inverse_multiply_band_matrix():
             with col2:
                 st.success("Résultat de multiplication")
                 st.dataframe(FR.matrix_to_fraction(result[0]))
+                
         
     except ValueError as e:
         st.error(f"Erreur lors de la conversion des données de la matrice A : {str(e)}")
@@ -105,11 +107,17 @@ def app_multiply_transpose_band_matrix():
 
         n = A.shape[0]
         matrix_type_A = dt.determine_matrix_type(A)
+        st.success(dt.message_info(matrix_type_A, A))
 
         if matrix_type_A[0] == "matrice bande":
             result = MA.multiplication_bande_transposer(A, matrix_type_A[1], n)
             st.success("Résultat de la multiplication de matrices par son Transposée :")
             st.dataframe(FR.matrix_to_fraction(result))
+        else :
+            result=MA.multiplication_dense_dense(A, A.T, n)
+            st.success("Résultat de la multiplication de matrices par son Transposée :")
+            st.dataframe(FR.matrix_to_fraction(result))
+
         
     except ValueError as e:
         st.error(f"Erreur lors de la conversion des données de la matrice A : {str(e)}")

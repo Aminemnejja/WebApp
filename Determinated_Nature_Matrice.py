@@ -80,4 +80,13 @@ def est_bande(matrice):
         return True,a[1]
     else :
         return False,False
-    
+def message_info(matrix_type,A):
+    if isinstance(matrix_type, str):
+        return f"Type de matrice A détecté : {matrix_type}"
+    elif matrix_type[0]=="matrice bande" and np.allclose(A, A.T): 
+        return f"Type de matrice A détecté  est une matrice  bande symétrique  de largeur m=  {matrix_type[1]}"
+    elif matrix_type[0]=="matrice bande" :
+        return f"Type de matrice A détecté  est une matrice  bande   de largeur m=  {matrix_type[1]}"        
+    else:
+        
+        return f"Type de matrice A détecté  est une matrice demi bande inférieur de largeur m=  {matrix_type[1]}"
