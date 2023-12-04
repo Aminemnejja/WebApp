@@ -24,22 +24,13 @@ def est_matrice_sup_bande(matrice):
     n = matrice.shape[0]
     if not np.all(np.triu(matrice) == matrice):
         return False,False
-
+    
     # Compter le nombre de diagonales non nulles
-    diagonales_non_nulles =  np.max(np.count_nonzero(np.triu(matrice,k=1), axis=1))
-    if diagonales_non_nulles==n-1:
+    diagonales_nulles=diagonales_nulles_sup(matrice)
+    if diagonales_nulles==0:
         return False,False
   
-
-    # Parcourir chaque élément en dehors de la bande
-    for i in range(n):
-        for j in range(i,n):
-            # Si l'élément est en dehors de la bande, il doit être égal à zéro
-            if abs(i - j) > diagonales_non_nulles and matrice[i, j] != 0:
-                
-                return False,False
-    m=diagonales_non_nulles
-    return True,m
+    return True,n-1-diagonales_nulles
 def est_matrice_inf_bande(matrice):
     
     n = matrice.shape[0]
@@ -48,36 +39,21 @@ def est_matrice_inf_bande(matrice):
     if not np.all(np.tril(matrice) == matrice):
         return False,False
     # Compter le nombre de diagonales non nulles
-    diagonales_non_nulles =  np.max(np.count_nonzero(np.tril(matrice,k=-1), axis=1))
-    if diagonales_non_nulles==n-1:
+    diagonales_nulles =  diagonales_nulles_inf(matrice)
+    if diagonales_nulles==0:
         return False,False
 
-  
-
-    # Parcourir chaque élément en dehors de la bande
-    for i in range(n):
-        for j in range(i+1):
-            # Si l'élément est en dehors de la bande, il doit être égal à zéro
-            if abs(i - j) > diagonales_non_nulles and matrice[i, j] != 0:
-                
-                return False,False
 
 
-    return True,diagonales_non_nulles
+
+    return True,n-1-diagonales_nulles
 def est_bande(matrice):
-    n=matrice.shape[0]
-    matrice_inf=np.zeros((n,n))
-    matrice_sup=np.zeros((n,n))
-    for i in range(n):
-        for j in range(i+1):
-            matrice_inf[i,j]=matrice[i,j]
-    for i in range(n):
-         for j in range(i,n):
-            matrice_sup[i,j]=matrice[i,j]
+    matrice_inf = np.tril(matrice)
+    matrice_sup = np.triu(matrice)
     a=est_matrice_inf_bande(matrice_inf)
     b=est_matrice_sup_bande(matrice_sup)
-    if a[0] and b[0] and a[1]==b[1]:
-        return True,a[1]
+    if a[0] and b[0] :
+        return True,max(a[1],b[1])
     else :
         return False,False
 def message_info(matrix_type,A):
@@ -90,3 +66,33 @@ def message_info(matrix_type,A):
     else:
         
         return f"Type de matrice A détecté  est une matrice demi bande inférieur de largeur m=  {matrix_type[1]}"
+def diagonales_nulles_sup(matrice):
+    # Extraire les diagonales
+    diagonales = [np.diag(matrice, k=-i) for i in range(-matrice.shape[0]+1, 0)]
+    print(diagonales)
+    # Compter les zéros dans chaque diagonale
+    diagonales_nulles_count = 0
+    for diag in diagonales:
+        if np.all(diag==0):
+            diagonales_nulles_count+=1
+        else:
+            break
+            
+    
+
+    return diagonales_nulles_count
+def diagonales_nulles_inf(matrice):
+    # Extraire les diagonales
+    diagonales = [np.diag(matrice, k=i) for i in range(-matrice.shape[0]+1, 0)]
+    print(diagonales)
+    # Compter les zéros dans chaque diagonale
+    diagonales_nulles_count = 0
+    for diag in diagonales:
+        if np.all(diag==0):
+            diagonales_nulles_count+=1
+        else:
+            break
+            
+    
+
+    return diagonales_nulles_count

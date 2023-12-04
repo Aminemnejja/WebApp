@@ -7,17 +7,31 @@ import Méthode_direct as m
 import Méthode_itérative as I
 import Fraction as FR 
 
+def est_decomposable_LU(matrice):
+    n = matrice.shape[0]
+
+    for k in range(n):
+        mineur_principal = matrice[:k+1, :k+1]
+        print(mineur_principal)
+        determinant_mineur = np.linalg.det(mineur_principal)
+
+        if determinant_mineur == 0:
+            return False  # Un mineur principal est nul, donc la matrice n'est pas décomposable sur LU
+
+    return True  # Tous les mineurs principaux sont non nuls, la matrice est décomposable sur LU
+
+
 def main():
 
     st.header(" Résolution de systéme : Ax=b")
     selected_option = st.radio("Sélectionnez une méthode", ["Méthode direct" ,"Méthode itérative" ])
     matrice_html=f.matriceA_html()
     vecteur_html=f.vecteur_html()
-    col1,col2=st.columns(2)
+    col1, col2 = st.columns([3,1])
     with col1:
-        st.components.v1.html(matrice_html,width=300, height=300)
+        st.components.v1.html(matrice_html,width=600, height=600)
     with col2:
-        st.components.v1.html(vecteur_html,width=300, height=300)
+        st.components.v1.html(vecteur_html,width=300, height=600)
     if selected_option=="Méthode direct":
         operation = st.selectbox("Choisissez l'opération ", ["Gauss","Gauss_jordan","Décomposition LU","Cholesky"])
          
@@ -75,7 +89,7 @@ def main():
                         st.dataframe(FR.matrix_to_fraction(x))
                 elif operation=="Décomposition LU":
                   
-                    if  matrix_type_A[0]=="matrice bande" and np.allclose(A, A.T) and np.all(np.linalg.eigvals(A) !=0):
+                    if  matrix_type_A[0]=="matrice bande" and np.allclose(A, A.T) and np.all(np.linalg.eigvals(A) >0):
                         st.header("A=L.D.L\u1D57")
                         L,D=m.decomposition_LU_bande_Symetrique(A, n, matrix_type_A[1])
                         U=np.dot(D,L.T)
@@ -91,7 +105,7 @@ def main():
                         st.write("X=")
                         st.dataframe(FR.matrix_to_fraction(x))
                         
-                    elif matrix_type_A[0]=="matrice bande"  and  np.all(np.linalg.eigvals(A) !=0) :
+                    elif matrix_type_A[0]=="matrice bande"  and  est_decomposable_LU(A) :
                         st.header("A=L.D")
                         L,U=m.decomposition_LU_bande(A, n, matrix_type_A[1])
                         y = t.sys_lin_inf_demiBande(L, b,n, matrix_type_A[1])
@@ -105,7 +119,7 @@ def main():
                                 st.dataframe(FR.matrix_to_fraction(U))
                         st.write("X=")
                         st.dataframe(FR.matrix_to_fraction(x))
-                    elif  matrix_type_A[0]=="Symétrique" and np.all(np.linalg.eigvals(A) !=0):
+                    elif  matrix_type_A[0]=="Symétrique" and np.all(np.linalg.eigvals(A) >0):
                         st.header("A=L.D.L\u1D57")
                         L,D=m.decomposition_LU_dense_Symetrique(A, n)
                         U=np.dot(D,L.T)
@@ -120,7 +134,7 @@ def main():
                                 st.dataframe(FR.matrix_to_fraction(U))
                         st.write("X=")
                         st.dataframe(FR.matrix_to_fraction(x))
-                    elif np.all(np.linalg.eigvals(A) !=0) :
+                    elif  est_decomposable_LU(A) :
                         st.header("A=L.D")
                         L,U=m.decomposition_LU_dense(A, n)
                         y = t.sys_lin_inf_dense(L, b,n)
