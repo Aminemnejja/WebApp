@@ -2,11 +2,11 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS  # Importez l'extension
 import os
 app = Flask(__name__)
-
-CORS(app, resources={r"/api/*": {"origins": "https://webapp-esz7.onrender.com"}})
 matrix_valuesA = []
 matrix_valuesB = []
 vector_values = []
+CORS(app)
+
 @app.route('/get_matrix_values_A', methods=['GET'])
 def get_matrix_values_A():
     # Logique pour récupérer les valeurs de la matrice
@@ -43,7 +43,6 @@ def update_vector_values():
     return jsonify({'message': 'Vector values updated successfully!'})
 
 if __name__ == '__main__':
-    app.run(debug=False, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
-
+    app.run(debug=False, host='0.0.0.0', port=5000)
 
 
