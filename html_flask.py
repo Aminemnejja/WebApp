@@ -1,6 +1,5 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS  # Importez l'extension
-import os
 app = Flask(__name__)
 
 CORS(app, resources={r"/api/*": {"origins": "https://webapp-esz7.onrender.com"}})
