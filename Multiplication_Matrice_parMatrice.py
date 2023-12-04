@@ -17,9 +17,9 @@ def main():
 
         col1,col2=st.columns(2)
         with col1:
-            st.components.v1.html(matriceA_html,width=300, height=300)
+            st.components.v1.html(matriceA_html,width=500, height=500)
         with col2:
-            st.components.v1.html(matriceB_html,width=300, height=300)
+            st.components.v1.html(matriceB_html,width=500, height=500)
         if st.button("Résultat"):
             app_multiply_matrices()
 
