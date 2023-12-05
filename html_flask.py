@@ -5,7 +5,7 @@ app = Flask(__name__)
 matrix_valuesA = []
 matrix_valuesB = []
 vector_values = []
-CORS(app)
+CORS(app, origins="*")
 
 @app.route('/get_matrix_values_A', methods=['GET'])
 def get_matrix_values_A():
